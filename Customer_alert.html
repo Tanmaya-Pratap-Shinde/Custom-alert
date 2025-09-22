@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>⏳ Question Shift Timer</title>
+  <style>
+    body {
+      background: linear-gradient(to right, #1e1e2f, #2e2e4f);
+      color: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 40px;
+    }
+    h1 {
+      font-size: 2em;
+      margin-bottom: 20px;
+    }
+    select, button {
+      font-size: 1.2em;
+      padding: 10px 20px;
+      margin: 10px;
+      border: none;
+      border-radius: 8px;
+      background-color: #3e3e5e;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #5e5e8e;
+    }
+    .status {
+      margin-top: 30px;
+      font-size: 1.2em;
+      color: #cfcfff;
+    }
+  </style>
+</head>
+<body>
+  <h1>✨ Question Shift Timer</h1>
+
+  <label for="focusTime">Total Focus Time:</label>
+  <select id="focusTime">
+    <option value="1800000">30 minutes</option>
+    <option value="3600000">1 hour</option>
+    <option value="5400000">1 hour 30 minutes</option>
+    <option value="7200000">2 hours</option>
+    <option value="9000000">2 hours 30 minutes</option>
+    <option value="10800000">3 hours</option>
+  </select>
+  <br>
+
+  <label for="interval">Alert Interval:</label>
+  <select id="interval">
+    <option value="15000">15 seconds</option>
+    <option value="30000">30 seconds</option>
+    <option value="45000">45 seconds</option>
+  </select>
+  <br>
+
+  <button onclick="startTimer()">▶️ Start</button>
+  <button onclick="stopTimer()">⏹️ Stop</button>
+  <div class="status" id="status">Timer is stopped.</div>
+
+  <script>
+    let intervalTimer, sessionTimer;
+
+    function speak(text) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 1;
+      speechSynthesis.speak(utterance);
+    }
+
+    function startTimer() {
+      const interval = parseInt(document.getElementById("interval").value);
+      const focusTime = parseInt(document.getElementById("focusTime").value);
+
+      document.getElementById("status").textContent = "Focus session started...";
+      speak("Focus session started");
+
+      intervalTimer = setInterval(() => {
+        speak("Time to change the question");
+      }, interval);
+
+      sessionTimer = setTimeout(() => {
+        stopTimer();
+        speak("Session complete. You did it.");
+        document.getElementById("status").textContent = "Session complete. You did it.";
+      }, focusTime);
+    }
+
+    function stopTimer() {
+      clearInterval(intervalTimer);
+      clearTimeout(sessionTimer);
+      document.getElementById("status").textContent = "Timer is stopped.";
+    }
+  </script>
+</body>
+</html>
